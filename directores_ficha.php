@@ -16,7 +16,17 @@
         <a href="./peliculas.php" class="btn btn-dark">Películas</a>&nbsp;&nbsp;
     </div>
     <div class="container">
-	<!-- INCLUIR CÓDIGO PHP -->
+	<?php
+    include("./lib/utils.php");
+
+    $dire=readDirector("./bbdd/directores.csv",1);
+
+    print_r($dire);
+
+    $directores=readDirectores("./bbdd/directores.csv");
+
+    print_r($directores);
+    ?>
         
     </div>
 </body>

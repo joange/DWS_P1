@@ -17,7 +17,17 @@
     </div>
     <div class="container">
 	<!-- INCLUIR CÓDIGO PHP -->
-        
+    <?php
+    include("./lib/utils.php");
+
+    $actor=readActor("./bbdd/actores.csv",1);
+
+    print_r($actor);
+
+    $actores=readActores("./bbdd/actores.csv");
+
+    print_r($actores);
+    ?>
     </div>
 </body>
 
