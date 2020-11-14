@@ -16,6 +16,7 @@
         <a href="./peliculas.php" class="btn btn-dark">Películas</a>&nbsp;&nbsp;
     </div>
     <div class="container">
+    <!-- codi PHP>
 	<?php
     include("./lib/utils.php");
 

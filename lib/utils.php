@@ -24,6 +24,8 @@ function readPelis($filename) {
         }
         
     }
+
+    fclose($f);
     return $lesPelis;  
 }
 
@@ -50,6 +52,7 @@ function readDirectores($filename) {
         }
         
     }
+    fclose($f);
     return $elsDirectors;  
 }
 
@@ -75,14 +78,15 @@ function readActores($filename) {
         }
         
     }
+    fclose($f);
     return $elsActors;  
 }
 
 /**
- * Función que a partir del nombre de fichero lee la información de UN SOLO
- * actor
+ * Función que a partir del nombre de fichero y su id, 
+ * lee la información de UN SOLO actor
  */
-function readACtor($filename, $id) {
+function readActor($filename, $id) {
 
     $field_names = array("id", "nombre", "anyo", "pais");
 
@@ -120,6 +124,7 @@ function readDirector($filename, $id) {
         }
         
     }
+    fclose($f);
     return $director;  
 }
 
@@ -146,6 +151,7 @@ function readPeli($filename,$id) {
         }
         
     }
+    fclose($f);
     return $peli;  
 }
 
@@ -165,31 +171,38 @@ function getDirectoresPeli($id) {
         }
         
     }
+    fclose($f);
     return $directores;  
 }
 
 
+/**
+ * Dado el Id de una peli, obtenemos los nombres de actores que han participado en ella
+ */
+function getActoresPeli($idPeli) {
 
-function directorsFromPeli($idPeli) {
+    $actores=array();
 
-    $field_names = array("id", "Titulo", "Anyo", "Duracion");
-
-
-    if (($f = @fopen($filename, "r"))!==false) {
-
-      //  echo "fitxer obert";
-        
-        $dades_peli = array();
+    if (($f = @fopen("./bbdd/pelicula_actor.csv", "r"))!==false) {
 
         while (($arrayFila = fgetcsv($f, 1000, ",")) !== FALSE) {
-            if ($arrayFila[0]==$id){
-                $peli=array_combine( $field_names, $arrayFila ) ;
-                break;
+            if ($arrayFila[0]==$idPeli){
+                array_push($actores,$arrayFila[1]);
             }
         }
         
     }
-    return $peli;  
+    fclose($f);
+
+    $nombreActores=array();
+
+    foreach ($actores as $act){
+        $actor=readActor("./bbdd/actores.csv",$act);
+        array_push($nombreActores,$actor["nombre"]);
+    }
+    
+
+    return $nombreActores;  
 }
 /**
 

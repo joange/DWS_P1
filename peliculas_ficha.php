@@ -17,6 +17,14 @@
     </div>
     <div class="container">
        <!-- INCLUIR CÓDIGO PHP -->
+       <?php
+    include("./lib/utils.php");
+
+    $actores=getActoresPeli(1);
+
+    print_r($actores);
+
+    ?>
 
     </div>
 </body>
