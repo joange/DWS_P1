@@ -16,19 +16,23 @@
         <a href="./peliculas.php" class="btn btn-dark">Películas</a>&nbsp;&nbsp;
     </div>
     <div class="container">
-    <!-- codi PHP>
-	<?php
+    <!-- Codi PHP -->
+    <?php
     include("./lib/utils.php");
 
-    $dire=readDirector("./bbdd/directores.csv",1);
+    $direId=$_GET["id"];
 
-    print_r($dire);
+    $director=readDirector($direId);
 
-    $directores=readDirectores("./bbdd/directores.csv");
-
-    print_r($directores);
+    echo '<div class="card-body" style="margin: auto;background:PALETURQUOISE;width:50%;">';
+    echo '<b>Nombre</b>:'. $director["nombre"] . '<br>';
+    echo '<b>Anyo</b>:'. $director["anyo"] . '<br>';
+    echo '<b>Pais</b>:'. $director["pais"] . '<br>';
+    echo '</div>';
     ?>
-        
+
+    <a href="javascript:history.back()"> Volver Atrás</a>
+
     </div>
 </body>
 

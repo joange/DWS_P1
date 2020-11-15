@@ -18,13 +18,35 @@
     <div class="container">
        <!-- INCLUIR CÓDIGO PHP -->
        <?php
-    include("./lib/utils.php");
+        include("./lib/utils.php");
 
-    $actores=getActoresPeli(1);
+        $peli=readPeli($_GET["id"]);
+    
+        $actores=getActoresPeli($_GET["id"]);
 
-    print_r($actores);
+        $directores=getDirectoresPeli($_GET["id"]);
+
+        echo '<div class="card-body" style="background:lavender;width:60%;margin: auto;">';
+        echo '<b>Título</b>:'. $peli["titulo"] . '<br>';
+        echo '<b>Anyo</b>:'. $peli["anyo"] . '<br>';
+        echo '<b>Duracion</b>:'. $peli["duracion"] . '<br>';
+        echo '<b>Director</b>:<br>';
+        echo '<ul>';
+        foreach ($directores as $dire){
+            echo '<li><a href="./directores_ficha.php?id=' . $dire["id"] . '">' . $dire["nombre"] . '</a>';
+        }
+        echo '</ul>';
+        echo '<b>Actores</b>:<br>';
+        echo '<ul>';
+        foreach ($actores as $actor){
+            echo '<li><a href="./actores_ficha.php?id=' . $actor["id"] . '">' . $actor["nombre"] . '</a>';
+        }
+        echo '</ul>';
+        echo '</div>';
 
     ?>
+
+<a href="javascript:history.back()"> Volver Atrás</a>
 
     </div>
 </body>

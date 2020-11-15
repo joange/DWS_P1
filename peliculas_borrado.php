@@ -13,6 +13,21 @@
 <div class="alert alert-success" role="alert">
             <!-- INCLUIR CÓDIGO PHP -->
 
+            <?php
+        include("./lib/utils.php");
+
+        
+        $idPeli=$_GET["id"];
+
+        deletePeli($idPeli) ;
+
+        echo '<div class="card-body" style="margin: auto;background:lightgreen;width:50%;">';
+        echo '<h4 style="color:darkgreen;"> Pelicula borrada con éxito </h4>';
+        echo '</div>';
+
+       
+        ?>
+        <a href="javascript:history.back()"> Volver Atrás</a>
     
 </body>
 </html>

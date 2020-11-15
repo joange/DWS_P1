@@ -1,16 +1,23 @@
 <?php
 
+
+define("fileActores","./bbdd/actores.csv");
+define("fileDirectores","./bbdd/directores.csv");
+define("fileP_A","./bbdd/pelicula_actor.csv");
+define("fileP_D","./bbdd/pelicula_director.csv");
+define("filePeliculas","./bbdd/peliculas.csv");
+
 /**
  * Función que a partir del nombre de fichero lee la información de TODAS
  * las películas
  */
-function readPelis($filename) {
+function readPelis() {
 
     $field_names = array("id", "Titulo", "Anyo", "Duracion");
 
     $lesPelis=array();
 
-    if (($f = @fopen($filename, "r"))!==false) {
+    if (($f = @fopen(filePeliculas, "r"))!==false) {
 
       //  echo "fitxer obert";
         
@@ -33,13 +40,13 @@ function readPelis($filename) {
  * Función que a partir del nombre de fichero lee la información de TODOS
  * los directores
  */
-function readDirectores($filename) {
+function readDirectores() {
 
     $field_names = array("id", "nombre", "anyo", "pais");
 
     $elsDirectors=array();
 
-    if (($f = @fopen($filename, "r"))!==false) {
+    if (($f = @fopen(fileDirectores, "r"))!==false) {
 
       //  echo "fitxer obert";
         
@@ -60,13 +67,13 @@ function readDirectores($filename) {
  * Función que a partir del nombre de fichero lee la información de TODOS
  * los ACTORES
  */
-function readActores($filename) {
+function readActores() {
 
     $field_names = array("id", "nombre", "anyo", "pais");
 
     $elsActors=array();
 
-    if (($f = @fopen($filename, "r"))!==false) {
+    if (($f = @fopen(fileActores, "r"))!==false) {
 
       //  echo "fitxer obert";
 
@@ -86,19 +93,20 @@ function readActores($filename) {
  * Función que a partir del nombre de fichero y su id, 
  * lee la información de UN SOLO actor
  */
-function readActor($filename, $id) {
+function readActor($idActor) {
 
     $field_names = array("id", "nombre", "anyo", "pais");
 
-    if (($f = @fopen($filename, "r"))!==false) {
+    $actor=array();
+    
+    if (($f = @fopen(fileActores, "r"))!==false) {
 
         while (($arrayFila = fgetcsv($f, 1000, ",")) !== FALSE) {
-            if ($arrayFila[0]==$id){
+            if ($arrayFila[0]==$idActor){
                 $actor=array_combine( $field_names, $arrayFila ) ;
                 break;
             }
         }
-        
     }
     return $actor;  
 }
@@ -108,13 +116,13 @@ function readActor($filename, $id) {
  * Función que a partir del nombre de fichero lee la información de US SOLO
  * los directores
  */
-function readDirector($filename, $id) {
+function readDirector( $id) {
 
     $field_names = array("id", "nombre", "anyo", "pais");
 
     $director=array();
 
-    if (($f = @fopen($filename, "r"))!==false) {
+    if (($f = @fopen(fileDirectores, "r"))!==false) {
 
         while (($arrayFila = fgetcsv($f, 1000, ",")) !== FALSE) {
             if ($arrayFila[0]==$id){
@@ -133,11 +141,11 @@ function readDirector($filename, $id) {
  * esa película INDIVIDUAL
  */
 
-function readPeli($filename,$id) {
+function readPeli($id) {
 
-    $field_names = array("id", "Titulo", "Anyo", "Duracion");
+    $field_names = array("id", "titulo", "anyo", "duracion");
 
-    if (($f = @fopen($filename, "r"))!==false) {
+    if (($f = @fopen(filePeliculas, "r"))!==false) {
 
       //  echo "fitxer obert";
         
@@ -158,15 +166,16 @@ function readPeli($filename,$id) {
 /**
  * Devuelve el nombre de los directores de una película dada
  */
-function getDirectoresPeli($id) {
+function getDirectoresPeli($idPeli) {
 
     $directores=array();
 
-    if (($f = @fopen("./bbdd/directores.csv", "r"))!==false) {
+    if (($f = @fopen(fileP_D, "r"))!==false) {
 
         while (($arrayFila = fgetcsv($f, 1000, ",")) !== FALSE) {
-            if ($arrayFila[0]==$id){
-                array_push($directores,$arrayFila[1]);
+            if ($arrayFila[0]==$idPeli){
+                $director=readDirector($arrayFila[1]);
+                array_push($directores,$director);
             }
         }
         
@@ -183,7 +192,7 @@ function getActoresPeli($idPeli) {
 
     $actores=array();
 
-    if (($f = @fopen("./bbdd/pelicula_actor.csv", "r"))!==false) {
+    if (($f = @fopen(fileP_A, "r"))!==false) {
 
         while (($arrayFila = fgetcsv($f, 1000, ",")) !== FALSE) {
             if ($arrayFila[0]==$idPeli){
@@ -197,13 +206,89 @@ function getActoresPeli($idPeli) {
     $nombreActores=array();
 
     foreach ($actores as $act){
-        $actor=readActor("./bbdd/actores.csv",$act);
-        array_push($nombreActores,$actor["nombre"]);
+        $actor=readActor($act);
+        array_push($nombreActores,$actor);
     }
     
 
     return $nombreActores;  
 }
+
+/**
+ * Función que a partir del nombre de fichero lee la información de TODAS
+ * las películas
+ */
+function deletePeli($idPeli) {
+
+    // llegim totes les pelis
+    $lesPelis=readPelis();
+
+    // obrim el fitxer de pelis per a escriptura. 
+    $f = fopen(filePeliculas, "w");
+
+    foreach($lesPelis as $peli){
+
+        // la peli que volem borrar no la escrivim
+        if ($peli["id"]==$idPeli){
+            continue;
+        }
+
+        //convertim $peli (array asociatiu) en array
+
+        $valors_peli=array();
+        foreach($peli as $k=>$v){
+            array_push($valors_peli,$v);
+        }
+
+        //escrivim al fitxer
+        fputcsv($f,$valors_peli,",");
+
+    }
+
+    fclose($f);
+    
+
+    
+    
+}
+
+function editar_pelicula($peliActual){
+    //Array ( [id] => 3 [titulo] => Senderos de gloria [anyo] => 1957 [duracion] => 87 ) 
+    // leemos todas las pelis, y las volcamos al fichero menos la pasada como argumento
+
+    $lesPelis=readPelis();
+
+    // obrim el fitxer de pelis per a escriptura. 
+    $f = fopen(filePeliculas, "w");
+
+    foreach($lesPelis as $peli){
+
+        // guardem la peli llegida o l'actual, si és el cas
+        if ($peli["id"]==$peliActual["id"]){
+            $p=$peliActual;
+        }
+        else{
+            $p=$peli;
+        }
+
+        //convertim $peli (array asociatiu) en array
+
+        $valors_peli=array();
+        foreach($p as $k=>$v){
+            array_push($valors_peli,$v);
+        }
+
+        //escrivim al fitxer
+        fputcsv($f,$valors_peli,",");
+
+    }
+
+    fclose($f);
+        
+    
+
+}
+
 /**
 
  * utils.php, deberá contener al menos:

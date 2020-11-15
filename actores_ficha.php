@@ -17,17 +17,23 @@
     </div>
     <div class="container">
 	<!-- INCLUIR CÓDIGO PHP -->
+
+
     <?php
     include("./lib/utils.php");
 
-    $actor=readActor("./bbdd/actores.csv",1);
+    $actorId=$_GET["id"];
 
-    print_r($actor);
+    $actor=readActor($actorId);
 
-    $actores=readActores("./bbdd/actores.csv");
+    echo '<div class="card-body" style="margin: auto;background:LIGHTSKYBLUE;width:50%;">';
+    echo '<b>Nombre</b>:'. $actor["nombre"] . '<br>';
+    echo '<b>Anyo</b>:'. $actor["anyo"] . '<br>';
+    echo '<b>Pais</b>:'. $actor["pais"] . '<br>';
+    echo '</div>';
 
-    print_r($actores);
     ?>
+    <a href="javascript:history.back()"> Volver Atrás</a>
     </div>
 </body>
 

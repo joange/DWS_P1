@@ -12,9 +12,30 @@
 </head>
 
 <body>
-<div class="alert alert-success" role="alert">
-            <!-- INCLUIR CÓDIGO PHP -->
+<div class="alert alert-secondary d-flex">
+        <a href="./peliculas.php" class="btn btn-dark">Películas</a>&nbsp;&nbsp;
+</div>
 
+<div class="container">
+
+<h1>Edición de películas</h1>
+
+<?php
+
+include("./lib/utils.php");
+
+ editar_pelicula($_GET);
+
+ echo '<div class="card-body" style="margin: auto;background:lightgreen;width:50%;">';
+ echo '<h4 style="color:darkgreen;"> Pelicula guardada con éxito </h4>';
+ echo '</div>';
+
+ 
+
+?>
+
+<a href="javascript:history.back()"> Volver Atrás</a>
+</div>
 
 </body>
 
